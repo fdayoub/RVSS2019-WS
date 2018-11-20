@@ -26,7 +26,7 @@ rawImage = PiRGBArray(camera, size=(IM_WIDTH, IM_HEIGHT))
 time.sleep(1)
 #for teleop
 pygame.init()
-pygame.display.set_mode((10,10))
+pygame.display.set_mode((100,100))
 mA = ppi.Motor("AD_MOTOR_R")
 mB = ppi.Motor("AD_MOTOR_L")
 print("Initializing")
@@ -48,9 +48,11 @@ try:
                 if event.key == pygame.K_DOWN:
                     angle = 0
                 if event.key == pygame.K_RIGHT:
-                    angle += 0.05
+                    print("right")
+                    angle += 0.1
                 if event.key == pygame.K_LEFT:
-                    angle -= 0.05
+                    print("left")
+                    angle -= 0.1
         angle = np.clip(angle, -0.5, 0.5)
         Kd = 15
         Ka = 25
