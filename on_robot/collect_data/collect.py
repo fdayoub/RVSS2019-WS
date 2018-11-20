@@ -27,12 +27,12 @@ time.sleep(1)
 #for teleop
 pygame.init()
 pygame.display.set_mode((10,10))
-mA = ppi.Motor(ppi.AD_MOTOR_A)
-mB = ppi.Motor(ppi.AD_MOTOR_B)
+mA = ppi.Motor("AD_MOTOR_R")
+mB = ppi.Motor("AD_MOTOR_L")
 print("Initializing")
 ppi.init()
-mA.set_power(0)
-mB.set_power(0)
+mA.set_velocity(0)
+mB.set_velocity(0)
 # Teleop robot and save image taken as [leading count] + [steer angle between -0.5 and 0.5] .jpg 
 try:
     angle = 0
@@ -56,13 +56,13 @@ try:
         Ka = 25
         left  = int(Kd + Ka*angle)
         right = int(Kd - Ka*angle)
-        mA.set_power(right)
-        mB.set_power(left)
+        mA.set_velocity(right)
+        mB.set_velocity(left)
        
         cv2.imwrite("data/"+str(lead).zfill(6)+'%.2f'%angle+".jpg", image) 
         lead += 1
         rawImage.truncate(0)
 except KeyboardInterrupt:
-    mA.set_power(0)
-    mB.set_power(0)
+    mA.set_velocity(0)
+    mB.set_velocity(0)
 
