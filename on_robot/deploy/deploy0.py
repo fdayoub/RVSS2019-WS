@@ -25,12 +25,12 @@ camera.resolution = (IM_WIDTH, IM_HEIGHT)
 rawImage = PiRGBArray(camera, size=(IM_WIDTH, IM_HEIGHT))
 time.sleep(1)
 #~~~~~~~~~~~~ SET UP ROBOT ~~~~~~~~~~~~~~
-mA = ppi.Motor(ppi.AD_MOTOR_A)
-mB = ppi.Motor(ppi.AD_MOTOR_B)
+mA = ppi.Motor("AD_MOTOR_R")
+mB = ppi.Motor("AD_MOTOR_L")
 print("Initializing")
 ppi.init()
-mA.set_power(0)
-mB.set_power(0)
+mA.set_velocity(0)
+mB.set_velocity(0)
 try:
     angle = 0
     while True:
@@ -52,5 +52,5 @@ try:
         
         rawImage.truncate(0)
 except KeyboardInterrupt:
-    mA.set_power(0)
-    mB.set_power(0)
+    mA.set_velocity(0)
+    mB.set_velocity(0)
