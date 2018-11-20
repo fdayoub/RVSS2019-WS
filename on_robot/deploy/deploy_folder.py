@@ -41,7 +41,7 @@ def main():
         input_img = preprocess_img(image,transform)
         #print(input_img.shape)
         steer = net(input_img).data.numpy()
-        print(np.argmax(steer))
+        print(steer)
 
 
 
