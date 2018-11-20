@@ -47,8 +47,8 @@ try:
         left  = int(Kd + Ka*steer)
         right = int(Kd - Ka*steer)
         
-        mA.set_power(right)
-        mB.set_power(left)
+        mA.set_velocity(right)
+        mB.set_velocity(left)
         
         rawImage.truncate(0)
 except KeyboardInterrupt:
