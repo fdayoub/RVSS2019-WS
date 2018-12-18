@@ -53,6 +53,11 @@ try:
                 if event.key == pygame.K_LEFT:
                     print("left")
                     angle -= 0.1
+                if event.key == pygame.K_SPACE:
+                    print("stop")
+                    mA.set_velocity(0)
+                    mB.set_velocity(0)
+                    raise KeyboardInterrupt
         angle = np.clip(angle, -0.5, 0.5)
         Kd = 15
         Ka = 25
