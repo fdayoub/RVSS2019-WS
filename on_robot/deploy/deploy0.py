@@ -10,10 +10,28 @@ import penguinPi as ppi
 import pygame
 import torch
 from torch import nn
-# USE OWN NETWORK SIZE AND LOAD IN WEIGHTS
-net = nn.Sequential(nn.Linear(84*29, 1280), nn.ReLU(), nn.Linear(1280, 512), nn.ReLU(), nn.Linear(512, 128), nn.ReLU(), nn.Linear(128, 1))
-#net.load_state_dict(torch.load('net.pt'))
-# Constants
+from steerNet import SteerNet
+from torchvision import transforms
+
+def load_net(wegihts_filename):
+    model = SteerNet()
+    model.load_state_dict(torch.load(wegihts_filename))
+    model.eval()        
+    return model
+
+def preprocess_img(img,transform):
+    img = transform(img)
+    # add dimension for batch
+    img = img.unsqueeze(0)
+    return img
+
+
+transform = transforms.Compose([
+    transforms.ToTensor(),
+    transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
+    ])
+net = load_net("steerNet.pt")
+
 IM_WIDTH = 160
 IM_HEIGHT = 120
 minimum_area = 25
@@ -38,9 +56,16 @@ try:
         image = rawImage.array
         image = cv2.resize(image, (84,84))
         # EDIT INPUT SIZE
-        steer = net(torch.FloatTensor(strip).view(84*29)).data.numpy()
-        steer = np.clip(steer, -0.5, 0.5)
-        
+        input_img = preprocess_img(image,transform)
+        direc = net(input_img).data.numpy()
+        direc = np.argmax(direc)
+        if direc == 0:
+            steer = 0.1
+        elif direc == 1:
+            steer = -0.1
+        else:
+            steer = 0
+       
         print(steer)
         Kd = 15 
         Ka = 25
