@@ -2,8 +2,6 @@
 import time
 import click
 import math
-import picamera
-from picamera.array import PiRGBArray
 import sys
 sys.path.append("..")
 import cv2
