@@ -1,12 +1,24 @@
+import cv2
 import numpy as np
 import requests
-import cv2      
 
-def set_velocity(vel0, vel1):
-    r = requests.get("http://localhost:8080/robot/set/velocity?value="+str(vel0)+","+str(vel1))
 
-def get_image():
-    r = requests.get("http://localhost:8080/camera/get")
-    img = cv2.imdecode(np.fromstring(r.content,np.uint8), cv2.IMREAD_COLOR)
+def set_velocity(vel0, vel1, timeout=0.5):
+    try:
+        requests.get(
+            "http://localhost:8080/robot/set/velocity?value=" + str(vel0) + "," + str(vel1),
+            timeout=timeout,
+        )
+    except requests.RequestException:
+        return False
+    return True
 
-    return img
+
+def get_image(timeout=1.0):
+    try:
+        response = requests.get("http://localhost:8080/camera/get", timeout=timeout)
+    except requests.RequestException:
+        return None
+
+    image = cv2.imdecode(np.frombuffer(response.content, np.uint8), cv2.IMREAD_COLOR)
+    return image
